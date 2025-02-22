@@ -55,6 +55,32 @@ app.get("/getUsers", (req, res) => {
     });
 });
 
+// 🟡 API for User Login (POST)
+app.post("/login", (req, res) => {
+    const { gct_mail_id, password } = req.body;
+
+    if (!gct_mail_id || !password) {
+        return res.status(400).json({ error: "Email and password are required" });
+    }
+
+    // ✅ SQL Query to Check if User Exists
+    const sql = "SELECT * FROM students WHERE gct_mail_id = ? AND password = ?";
+
+    db.query(sql, [gct_mail_id, password], (err, result) => {
+        if (err) {
+            console.error("❌ Error checking user:", err);
+            return res.status(500).json({ error: "Database error", details: err });
+        }
+
+        if (result.length > 0) {
+            res.json({ message: "✅ Login successful", user: result[0] });
+        } else {
+            res.status(401).json({ error: "Invalid email or password" });
+        }
+    });
+});
+
+
 // Start Server
 app.listen(3000, () => {
     console.log("🚀 Server running on port 3000");
