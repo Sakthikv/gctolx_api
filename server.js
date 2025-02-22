@@ -64,7 +64,7 @@ app.post("/login", (req, res) => {
     }
 
     // ✅ SQL Query to Check if User Exists
-    const sql = "SELECT * FROM students WHERE gct_mail_id = ? AND password = ?";
+    const sql = "SELECT * FROM students WHERE gct_mail_id = ? AND phone_number = ?";
 
     db.query(sql, [gct_mail_id, password], (err, result) => {
         if (err) {
