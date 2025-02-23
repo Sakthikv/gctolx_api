@@ -73,7 +73,7 @@ app.post("/login", (req, res) => {
         }
 
         if (result.length > 0) {
-            res.json({ message: "✅ Login successful", user: result[0] });
+            res.json(result);
         } else {
             res.status(401).json({ error: "Invalid email or password" });
         }
