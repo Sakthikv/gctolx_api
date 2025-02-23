@@ -96,15 +96,15 @@ app.post("/login", (req, res) => {
     });
 });
 app.post("/addProduct", (req, res) => {
-    const { student_id, product_name, product_details, product_type, cost, image } = req.body;
+    const { student_id, product_name, product_details, product_type, cost, url } = req.body;
 
-    if (!student_id || !product_name || !product_details || !product_type || !cost || !image) {
+    if (!student_id || !product_name || !product_details || !product_type || !cost || !url) {
         return res.status(400).json({ error: "All fields including image are required" });
     }
 
     const sql = "INSERT INTO product_info (student_id, product_name, product_details, product_type, cost, url) VALUES (?, ?, ?, ?, ?, ?)";
 
-    db.query(sql, [student_id, product_name, product_details, product_type, cost, image], (err, result) => {
+    db.query(sql, [student_id, product_name, product_details, product_type, cost, url], (err, result) => {
         if (err) {
             console.error("❌ Error inserting product:", err);
             return res.status(500).json({ error: "Database error", details: err });
