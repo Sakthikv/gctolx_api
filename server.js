@@ -55,6 +55,22 @@ app.get("/getUsers", (req, res) => {
     });
 });
 
+app.get("/getUser_by_id", (req, res) => {
+    const { student_id } = req.query; // 🔹 Use req.query instead of req.params
+    if (!student_id) {
+        return res.status(400).json({ error: "Missing product_id" });
+    }
+
+    const sql = "SELECT * FROM students WHERE student_id = ?";
+    db.query(sql, [student_id], (err, result) => {
+        if (err) {
+            console.error("❌ Error fetching product:", err);
+            return res.status(500).json({ error: "Database error", details: err });
+        }
+        res.json(result[0] || { message: "Product not found" });
+    });
+});
+
 // 🟡 API for User Login (POST)
 app.post("/login", (req, res) => {
     const { gct_mail_id, password } = req.body;
@@ -124,6 +140,7 @@ app.get("/getProduct_by_id", (req, res) => {
         res.json(result[0] || { message: "Product not found" });
     });
 });
+
 
 app.get("/getProduct_by_type", (req, res) => {
     const { product_type } = req.query; // Use query parameters
