@@ -121,6 +121,17 @@ app.get("/getProduct", (req, res) => {
         res.json(result);
     });
 });
+app.get("/getProduct_by_type", (req, res) => {
+    const { type } = req.query; // Use query parameters
+    const sql = "SELECT * FROM product_info WHERE product_type = ?";
+    db.query(sql, [type], (err, result) => {
+        if (err) {
+            console.error("❌ Error fetching products:", err);
+            return res.status(500).json({ error: "Database error", details: err });
+        }
+        res.json(result);
+    });
+});
 
 
 // Start Server
