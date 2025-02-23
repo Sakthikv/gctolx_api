@@ -109,18 +109,18 @@ app.get("/getProducts", (req, res) => {
     });
 });
 
-// 🔵 API to Fetch a Single Product by ID (GET)
-app.get("/getProduct_by_id", (req, res) => {
-    const { product_id } = req.params;
+app.get("/getProduct_by_id/:product_id", (req, res) => {
+    const { product_id } = req.params; // Extracting product_id from URL parameters
     const sql = "SELECT * FROM product_info WHERE product_id = ?";
     db.query(sql, [product_id], (err, result) => {
         if (err) {
             console.error("❌ Error fetching product:", err);
             return res.status(500).json({ error: "Database error", details: err });
         }
-        res.json(result);
+        res.json(result[0] || { message: "Product not found" });
     });
 });
+
 app.get("/getProduct_by_type", (req, res) => {
     const { product_type } = req.query; // Use query parameters
     const sql = "SELECT * FROM product_info WHERE product_type = ?";
