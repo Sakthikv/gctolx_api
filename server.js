@@ -110,7 +110,7 @@ app.get("/getProducts", (req, res) => {
 });
 
 // 🔵 API to Fetch a Single Product by ID (GET)
-app.get("/getProduct/:id", (req, res) => {
+app.get("/getProduct", (req, res) => {
     const { id } = req.params;
     const sql = "SELECT * FROM product_info WHERE product_id = ?";
     db.query(sql, [id], (err, result) => {
