@@ -79,6 +79,48 @@ app.post("/login", (req, res) => {
         }
     });
 });
+app.post("/addProduct", (req, res) => {
+    const { student_id, product_name, product_details, product_type, cost, image } = req.body;
+
+    if (!student_id || !product_name || !product_details || !product_type || !cost || !image) {
+        return res.status(400).json({ error: "All fields including image are required" });
+    }
+
+    const sql = "INSERT INTO product_info (student_id, product_name, product_details, product_type, cost, url) VALUES (?, ?, ?, ?, ?, ?)";
+
+    db.query(sql, [student_id, product_name, product_details, product_type, cost, image], (err, result) => {
+        if (err) {
+            console.error("❌ Error inserting product:", err);
+            return res.status(500).json({ error: "Database error", details: err });
+        }
+        res.json({ message: "✅ Product added successfully" });
+    });
+});
+
+// 🔵 API to Fetch Products (GET)
+app.get("/getProducts", (req, res) => {
+    const sql = "SELECT * FROM product_info";
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.error("❌ Error fetching products:", err);
+            return res.status(500).json({ error: "Database error", details: err });
+        }
+        res.json(result);
+    });
+});
+
+// 🔵 API to Fetch a Single Product by ID (GET)
+app.get("/getProduct/:id", (req, res) => {
+    const { id } = req.params;
+    const sql = "SELECT * FROM product_info WHERE product_id = ?";
+    db.query(sql, [id], (err, result) => {
+        if (err) {
+            console.error("❌ Error fetching product:", err);
+            return res.status(500).json({ error: "Database error", details: err });
+        }
+        res.json(result[0]);
+    });
+});
 
 
 // Start Server
