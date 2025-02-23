@@ -118,7 +118,7 @@ app.get("/getProduct/:id", (req, res) => {
             console.error("❌ Error fetching product:", err);
             return res.status(500).json({ error: "Database error", details: err });
         }
-        res.json(result[0]);
+        res.json(result);
     });
 });
 
