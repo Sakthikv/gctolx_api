@@ -110,10 +110,10 @@ app.get("/getProducts", (req, res) => {
 });
 
 // 🔵 API to Fetch a Single Product by ID (GET)
-app.get("/getProduct", (req, res) => {
-    const { id } = req.params;
+app.get("/getProduct_by_id", (req, res) => {
+    const { product_id } = req.params;
     const sql = "SELECT * FROM product_info WHERE product_id = ?";
-    db.query(sql, [id], (err, result) => {
+    db.query(sql, [product_id], (err, result) => {
         if (err) {
             console.error("❌ Error fetching product:", err);
             return res.status(500).json({ error: "Database error", details: err });
