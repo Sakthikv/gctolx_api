@@ -109,8 +109,12 @@ app.get("/getProducts", (req, res) => {
     });
 });
 
-app.get("/getProduct_by_id/:product_id", (req, res) => {
-    const { product_id } = req.params; // Extracting product_id from URL parameters
+app.get("/getProduct_by_id", (req, res) => {
+    const { product_id } = req.query; // 🔹 Use req.query instead of req.params
+    if (!product_id) {
+        return res.status(400).json({ error: "Missing product_id" });
+    }
+
     const sql = "SELECT * FROM product_info WHERE product_id = ?";
     db.query(sql, [product_id], (err, result) => {
         if (err) {
