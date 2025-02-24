@@ -95,6 +95,32 @@ app.post("/login", (req, res) => {
         }
     });
 });
+// 🟡 API for User Signup Email Validation (POST)
+app.post("/signup_validation", (req, res) => {
+    const { gct_mail_id } = req.body;
+
+    if (!gct_mail_id) {
+        return res.status(400).json({ error: "Email is required" });
+    }
+
+    // ✅ SQL Query to Check if Email Exists
+    const sql = "SELECT gct_mail_id FROM students WHERE gct_mail_id = ?";
+
+    db.query(sql, [gct_mail_id], (err, result) => {
+        if (err) {
+            console.error("❌ Database Error:", err);
+            return res.status(500).json({ error: "Database error", details: err });
+        }
+
+        if (result.length > 0) {
+            return res.status(409).json({ error: "This email is already associated with an account" });
+        } else {
+            res.status(200).json({ message: "Email is available for signup" });
+        }
+    });
+});
+
+
 app.post("/addProduct", (req, res) => {
     const { student_id, product_name, product_details, product_type, cost, url } = req.body;
 
