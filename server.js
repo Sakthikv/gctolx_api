@@ -167,6 +167,22 @@ app.get("/getProduct_by_id", (req, res) => {
     });
 });
 
+app.get("/getProducts_except_student", (req, res) => {
+    const { student_id } = req.query; // 🔹 Use req.query instead of req.params
+    if (!student_id) {
+        return res.status(400).json({ error: "Missing student_id" });
+    }
+
+    const sql = "SELECT * FROM product_info WHERE student_id != ?";
+    db.query(sql, [student_id], (err, result) => {
+        if (err) {
+            console.error("❌ Error fetching products:", err);
+            return res.status(500).json({ error: "Database error", details: err });
+        }
+        res.json(result.length > 0 ? result : { message: "No products found" });
+    });
+});
+
 
 app.get("/getProduct_by_type", (req, res) => {
     const { product_type } = req.query; // Use query parameters
