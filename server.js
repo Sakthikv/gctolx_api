@@ -216,13 +216,19 @@ app.get("/getProduct_by_name_or_type", (req, res) => {
         return res.status(400).json({ error: "Missing student ID" });
     }
 
+    // Convert student_id to an integer to ensure proper comparison
+    const studentIdInt = parseInt(student_id, 10);
+
+    if (isNaN(studentIdInt)) {
+        return res.status(400).json({ error: "Invalid student ID" });
+    }
+
     const sql = `
         SELECT * FROM product_info 
         WHERE (product_name LIKE ? OR product_type LIKE ?) 
         AND student_id != ?
     `;
-    const params = [`%${search_param}%`, `%${search_param}%`, Number(student_id)];
-
+    const params = [`%${search_param}%`, `%${search_param}%`, studentIdInt];
 
     db.query(sql, params, (err, result) => {
         if (err) {
@@ -232,7 +238,6 @@ app.get("/getProduct_by_name_or_type", (req, res) => {
         res.json(result);
     });
 });
-
 
 
 // Start Server
