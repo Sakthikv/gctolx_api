@@ -207,13 +207,21 @@ app.get("/getProduct_by_name", (req, res) => {
     });
 });
 app.get("/getProduct_by_name_or_type", (req, res) => {
-    const { search_param } = req.query;
+    const { search_param, student_id } = req.query;
+
     if (!search_param) {
         return res.status(400).json({ error: "Missing search parameter" });
     }
+    if (!student_id) {
+        return res.status(400).json({ error: "Missing student ID" });
+    }
 
-    const sql = "SELECT * FROM product_info WHERE product_name LIKE ? OR product_type LIKE ?";
-    const params = [`%${search_param}%`, `%${search_param}%`];
+    const sql = `
+        SELECT * FROM product_info 
+        WHERE (product_name LIKE ? OR product_type LIKE ?) 
+        AND student_id != ?
+    `;
+    const params = [`%${search_param}%`, `%${search_param}%`, student_id];
 
     db.query(sql, params, (err, result) => {
         if (err) {
@@ -223,6 +231,7 @@ app.get("/getProduct_by_name_or_type", (req, res) => {
         res.json(result);
     });
 });
+
 
 
 // Start Server
