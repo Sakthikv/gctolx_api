@@ -221,7 +221,8 @@ app.get("/getProduct_by_name_or_type", (req, res) => {
         WHERE (product_name LIKE ? OR product_type LIKE ?) 
         AND student_id != ?
     `;
-    const params = [`%${search_param}%`, `%${search_param}%`, student_id];
+    const params = [`%${search_param}%`, `%${search_param}%`, Number(student_id)];
+
 
     db.query(sql, params, (err, result) => {
         if (err) {
