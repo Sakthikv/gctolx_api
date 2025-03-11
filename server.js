@@ -239,6 +239,27 @@ app.get("/getProduct_by_name_or_type", (req, res) => {
     });
 });
 
+app.post("/addcart", (req, res) => {
+    const { product_id, student_id, buying_student_id, product_name, product_type, cost, url } = req.body;
+
+    // Validate required fields
+    if (!product_id || !student_id || !product_name || !buying_student_id || !product_type || !cost || !url) {
+        return res.status(400).json({ error: "All fields including image are required" });
+    }
+
+    // Corrected SQL Query (removed extra comma and used correct columns)
+    const sql = "INSERT INTO product_cart (product_id, student_id, buying_student_id, product_name, product_type, cost, url) VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+    // Correct parameter order
+    db.query(sql, [product_id, student_id, buying_student_id, product_name, product_type, cost, url], (err, result) => {
+        if (err) {
+            console.error("❌ Error inserting product:", err);
+            return res.status(500).json({ error: "Database error", details: err });
+        }
+        res.json({ message: "✅ Product added successfully" });
+    });
+});
+
 
 // Start Server
 app.listen(3000, () => {
