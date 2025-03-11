@@ -151,21 +151,6 @@ app.get("/getProducts", (req, res) => {
     });
 });
 
-app.get("/getProduct_by_id", (req, res) => {
-    const { product_id } = req.query; // 🔹 Use req.query instead of req.params
-    if (!product_id) {
-        return res.status(400).json({ error: "Missing product_id" });
-    }
-
-    const sql = "SELECT * FROM product_info WHERE product_id = ?";
-    db.query(sql, [product_id], (err, result) => {
-        if (err) {
-            console.error("❌ Error fetching product:", err);
-            return res.status(500).json({ error: "Database error", details: err });
-        }
-        res.json(result[0] || { message: "Product not found" });
-    });
-});
 
 app.get("/getProducts_except_student", (req, res) => {
     const { student_id } = req.query; // 🔹 Use req.query instead of req.params
@@ -183,29 +168,6 @@ app.get("/getProducts_except_student", (req, res) => {
     });
 });
 
-
-app.get("/getProduct_by_type", (req, res) => {
-    const { product_type } = req.query; // Use query parameters
-    const sql = "SELECT * FROM product_info WHERE product_type = ?";
-    db.query(sql, [product_type], (err, result) => {
-        if (err) {
-            console.error("❌ Error fetching products:", err);
-            return res.status(500).json({ error: "Database error", details: err });
-        }
-        res.json(result);
-    });
-});
-app.get("/getProduct_by_name", (req, res) => {
-    const { product_name } = req.query; // Use query parameters
-    const sql = "SELECT * FROM product_info WHERE product_name = ?";
-    db.query(sql, [product_name], (err, result) => {
-        if (err) {
-            console.error("❌ Error fetching products:", err);
-            return res.status(500).json({ error: "Database error", details: err });
-        }
-        res.json(result);
-    });
-});
 app.get("/getProduct_by_name_or_type", (req, res) => {
     const { search_param, student_id } = req.query;
 
