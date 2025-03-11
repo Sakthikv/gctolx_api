@@ -214,8 +214,8 @@ app.post("/addcart", (req, res) => {
 
     // Validate required fields
     if (!product_id || !student_id || !product_name || !buying_student_id || !product_type || !cost || !url) {
-        if(!product_id)
-        return res.status(400).json({ error: "All fields including image are required pi" });
+        // if(!product_id)
+        // return res.status(400).json({ error: "All fields including image are required pi" });
  if(!student_id)
         return res.status(400).json({ error: "All fields including image are required si" });
  if(!buying_student_id)
