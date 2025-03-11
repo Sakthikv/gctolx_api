@@ -224,7 +224,7 @@ app.post("/addcart", (req, res) => {
             console.error("❌ Error inserting product:", err);
             return res.status(500).json({ error: "Database error", details: err });
         }
-        res.json({ message: "✅ Product added to cart successfully" });
+        res.status(200).json({ message: "✅ Product added to cart successfully" });
     });
 });
 
