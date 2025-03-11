@@ -242,13 +242,13 @@ app.get("/getProduct_by_name_or_type", (req, res) => {
 app.post("/addcart", (req, res) => {
     let { product_id, student_id, buying_student_id, product_name, product_type, cost, url } = req.body;
 
-    console.log("Received data:", req.body); // Check incoming data
+    // console.log("Received data:", req.body); // Check incoming data
 
-    // Parse numbers (optional for safety)
-    product_id = parseInt(product_id);
-    student_id = parseInt(student_id);
-    buying_student_id = parseInt(buying_student_id);
-    cost = parseFloat(cost);
+    // // Parse numbers (optional for safety)
+    // product_id = parseInt(product_id);
+    // student_id = parseInt(student_id);
+    // buying_student_id = parseInt(buying_student_id);
+    // cost = parseFloat(cost);
 
     // Validate required fields
     if (!product_id || !student_id || !product_name || !buying_student_id || !product_type || !cost || !url) {
