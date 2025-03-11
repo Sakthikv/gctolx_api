@@ -202,29 +202,41 @@ app.get("/getProduct_by_name_or_type", (req, res) => {
 });
 
 app.post("/addcart", (req, res) => {
-    const{ product_id, student_id, buying_student_id, product_name, product_type, cost, url } = req.body;
+    let { product_id, student_id, buying_student_id, product_name, product_type, cost, url } = req.body;
 
-    // console.log("Received data:", req.body); // Check incoming data
-
-    // // Parse numbers (optional for safety)
-    // product_id = parseInt(product_id);
-    // student_id = parseInt(student_id);
-    // buying_student_id = parseInt(buying_student_id);
-    // cost = parseFloat(cost);
+    // Parse numbers (optional but recommended)
+    product_id = parseInt(product_id);
+    student_id = parseInt(student_id);
+    buying_student_id = parseInt(buying_student_id);
+    cost = parseFloat(cost);
 
     // Validate required fields
     if (!product_id || !student_id || !product_name || !buying_student_id || !product_type || !cost || !url) {
         return res.status(400).json({ error: "All fields including image are required" });
     }
 
-    const sql = "INSERT INTO product_cart (product_id, student_id, buying_student_id, product_name, product_type, cost, url) VALUES (?, ?, ?, ?, ?, ?, ?)";
-
-    db.query(sql, [product_id, student_id, buying_student_id, product_name, product_type, cost, url], (err, result) => {
-        if (err) {
-            console.error("❌ Error inserting product:", err);
-            return res.status(500).json({ error: "Database error", details: err });
+    // Step 1: Check if product_id and buying_student_id combination already exists
+    const checkSql = "SELECT * FROM product_cart WHERE product_id = ? AND buying_student_id = ?";
+    db.query(checkSql, [product_id, buying_student_id], (checkErr, checkResult) => {
+        if (checkErr) {
+            console.error("❌ Error checking product:", checkErr);
+            return res.status(500).json({ error: "Database error while checking", details: checkErr });
         }
-        res.status(200).json({ message: "✅ Product added to cart successfully" });
+
+        if (checkResult.length > 0) {
+            // Product already in cart for this user
+            return res.status(200).json({ message: "❗ This item is already in the cart" });
+        } else {
+            // Step 2: Insert if not existing
+            const insertSql = "INSERT INTO product_cart (product_id, student_id, buying_student_id, product_name, product_type, cost, url) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            db.query(insertSql, [product_id, student_id, buying_student_id, product_name, product_type, cost, url], (insertErr, insertResult) => {
+                if (insertErr) {
+                    console.error("❌ Error inserting product:", insertErr);
+                    return res.status(500).json({ error: "Database error while inserting", details: insertErr });
+                }
+                res.status(200).json({ message: "✅ Product added to cart successfully" });
+            });
+        }
     });
 });
 
