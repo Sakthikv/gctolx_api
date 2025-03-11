@@ -242,11 +242,13 @@ app.get("/getProduct_by_name_or_type", (req, res) => {
 app.post("/addcart", (req, res) => {
     let { product_id, student_id, buying_student_id, product_name, product_type, cost, url } = req.body;
 
-    // Parse numbers to integers
+    console.log("Received data:", req.body); // Check incoming data
+
+    // Parse numbers (optional for safety)
     product_id = parseInt(product_id);
     student_id = parseInt(student_id);
     buying_student_id = parseInt(buying_student_id);
-    cost = parseInt(cost); // use parseFloat if cost can be decimal, else use parseInt
+    cost = parseFloat(cost);
 
     // Validate required fields
     if (!product_id || !student_id || !product_name || !buying_student_id || !product_type || !cost || !url) {
@@ -263,7 +265,6 @@ app.post("/addcart", (req, res) => {
         res.json({ message: "✅ Product added to cart successfully" });
     });
 });
-
 
 
 // Start Server
