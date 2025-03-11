@@ -240,17 +240,21 @@ app.get("/getProduct_by_name_or_type", (req, res) => {
 });
 
 app.post("/addcart", (req, res) => {
-    const { product_id, student_id, buying_student_id, product_name, product_type, cost, url } = req.body;
+    let { product_id, student_id, buying_student_id, product_name, product_type, cost, url } = req.body;
+
+    // Parse numbers to integers
+    product_id = parseInt(product_id);
+    student_id = parseInt(student_id);
+    buying_student_id = parseInt(buying_student_id);
+    cost = parseFloat(cost); // use parseFloat if cost can be decimal, else use parseInt
 
     // Validate required fields
     if (!product_id || !student_id || !product_name || !buying_student_id || !product_type || !cost || !url) {
         return res.status(400).json({ error: "All fields including image are required" });
     }
 
-    // Corrected SQL Query (removed extra comma and used correct columns)
     const sql = "INSERT INTO product_cart (product_id, student_id, buying_student_id, product_name, product_type, cost, url) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-    // Correct parameter order
     db.query(sql, [product_id, student_id, buying_student_id, product_name, product_type, cost, url], (err, result) => {
         if (err) {
             console.error("❌ Error inserting product:", err);
@@ -259,6 +263,7 @@ app.post("/addcart", (req, res) => {
         res.json({ message: "✅ Product added to cart successfully" });
     });
 });
+
 
 
 // Start Server
