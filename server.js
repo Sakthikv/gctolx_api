@@ -252,8 +252,21 @@ app.post("/addcart", (req, res) => {
 
     // Validate required fields
     if (!product_id || !student_id || !product_name || !buying_student_id || !product_type || !cost || !url) {
-        return res.status(400).json({ error: "All fields including image are required" });
+        if(!product_id)
+        return res.status(400).json({ error: "All fields including image are required pi" });
+ if(!student_id)
+        return res.status(400).json({ error: "All fields including image are required si" });
+ if(!buying_student_id)
+        return res.status(400).json({ error: "All fields including image are required buying si" });
+ if(!product_name)
+        return res.status(400).json({ error: "All fields including image are required product name" });
     }
+ if(!product_type)
+        return res.status(400).json({ error: "All fields including image are required type" });
+ if(!cost)
+        return res.status(400).json({ error: "All fields including image are required cost" });
+ if(!url)
+        return res.status(400).json({ error: "All fields including image are required url" });
 
     const sql = "INSERT INTO product_cart (product_id, student_id, buying_student_id, product_name, product_type, cost, url) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
