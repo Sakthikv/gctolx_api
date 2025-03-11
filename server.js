@@ -246,7 +246,7 @@ app.post("/addcart", (req, res) => {
     product_id = parseInt(product_id);
     student_id = parseInt(student_id);
     buying_student_id = parseInt(buying_student_id);
-    cost = parseFloat(cost); // use parseFloat if cost can be decimal, else use parseInt
+    cost = parseInt(cost); // use parseFloat if cost can be decimal, else use parseInt
 
     // Validate required fields
     if (!product_id || !student_id || !product_name || !buying_student_id || !product_type || !cost || !url) {
