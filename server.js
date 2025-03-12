@@ -239,7 +239,22 @@ app.post("/addcart", (req, res) => {
         }
     });
 });
+//get cart list
+app.get("/getProduct_by_buying_student_id", (req, res) => {
+    const { buying_student_id_id } = req.query; // 🔹 Use req.query instead of req.params
+    if (!buying_student_id_id) {
+        return res.status(400).json({ error: "Missing product_id" });
+    }
 
+    const sql = "SELECT * FROM product_cart WHERE buying_student_id = ?";
+    db.query(sql, [buying_student_id_id], (err, result) => {
+        if (err) {
+            console.error("❌ Error fetching product:", err);
+            return res.status(500).json({ error: "Database error", details: err });
+        }
+        res.status(200).json(result || { message: "Product not found" });
+    });
+});
 
 // Start Server
 app.listen(3000, () => {
