@@ -264,6 +264,24 @@ app.delete("/deleteProduct_by_buying_id", (req, res) => {
         res.status(200).json({ message: "Product deleted successfully" });
     });
 });
+
+
+app.get("/getProducts_student_id", (req, res) => {
+    const { student_id } = req.query; // 🔹 Use req.query instead of req.params
+    if (!student_id) {
+        return res.status(400).json({ error: "Missing student_id" });
+    }
+
+    const sql = "SELECT * FROM product_info WHERE student_id = ?";
+    db.query(sql, [student_id], (err, result) => {
+        if (err) {
+            console.error("❌ Error fetching products:", err);
+            return res.status(500).json({ error: "Database error", details: err });
+        }
+        res.json(result.length > 0 ? result : { message: "No products found" });
+    });
+});
+
 // Start Server
 app.listen(3000, () => {
     console.log("🚀 Server running on port 3000");
