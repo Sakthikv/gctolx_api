@@ -285,7 +285,7 @@ app.get("/getProducts_student_id", (req, res) => {
 app.delete("/deleteProduct_by_product_id", (req, res) => {
     const {product_id } = req.query; // Using req.query to get buying_id from URL params
 
-    if (!buying_id) {
+    if (!product_id) {
         return res.status(400).json({ error: "Missing buying_id" });
     }
 
