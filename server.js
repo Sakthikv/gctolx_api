@@ -281,27 +281,7 @@ app.get("/getProducts_student_id", (req, res) => {
         res.json(result.length > 0 ? result : { message: "No products found" });
     });
 });
-app.delete("/deleteProduct_by_product_id", (req, res) => {
-    const {product_id } = req.query; // Using req.query to get buying_id from URL params
 
-    if (!buying_id) {
-        return res.status(400).json({ error: "Missing buying_id" });
-    }
-
-    const sql = "DELETE FROM product_info WHERE product_id = ?";
-    db.query(sql, [product_id], (err, result) => {
-        if (err) {
-            console.error("❌ Error deleting product:", err);
-            return res.status(500).json({ error: "Database error", details: err });
-        }
-
-        if (result.affectedRows === 0) {
-            return res.status(404).json({ message: "Product not found" });
-        }
-
-        res.status(200).json({ message: "Product deleted successfully" });
-    });
-});
 
 
 
