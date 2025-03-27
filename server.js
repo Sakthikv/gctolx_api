@@ -126,12 +126,12 @@ app.post("/addProduct", (req, res) => {
 
 
 app.get("/getProducts_except_student", (req, res) => {
-    const { student_id } = req.query; // 🔹 Use req.query instead of req.params
+    const { student_id } = req.query;
     if (!student_id) {
         return res.status(400).json({ error: "Missing student_id" });
     }
 
-    const sql = "SELECT * FROM product_info WHERE student_id != ?";
+    const sql = "SELECT * FROM product_info WHERE student_id != ? ORDER BY RAND()";
     db.query(sql, [student_id], (err, result) => {
         if (err) {
             console.error("❌ Error fetching products:", err);
