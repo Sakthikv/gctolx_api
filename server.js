@@ -32,7 +32,7 @@ app.post("/addUser", (req, res) => {
 
     // ✅ Corrected SQL Query with userid
     const sql = "INSERT INTO students ( student_name, gct_mail_id,phone_number,department, batch,password,fcm_token) VALUES (?, ?, ?, ?, ?,?,?)";
-    
+
     db.query(sql, [student_name,emailid,phone, department, batch,password,fcmtoken], (err, result) => {
         if (err) {
             console.error("❌ Error inserting data:", err);
@@ -159,8 +159,8 @@ app.get("/getProduct_by_name_or_type", (req, res) => {
     }
 
     const sql = `
-        SELECT * FROM product_info 
-        WHERE (product_name LIKE ? OR product_type LIKE ?) 
+        SELECT * FROM product_info
+        WHERE (product_name LIKE ? OR product_type LIKE ?)
         AND student_id != ?
     `;
     const params = [`%${search_param}%`, `%${search_param}%`, studentIdInt];
