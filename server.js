@@ -24,16 +24,16 @@ db.connect(err => {
 
 // 🟢 API to Insert Data (POST)
 app.post("/addUser", (req, res) => {
-    const { student_name,phone, emailid, department, batch,password } = req.body;
+    const { student_name,phone, emailid, department, batch,password,fcmtoken } = req.body;
 
-    if ( !student_name || !emailid || !department || !batch||!password) {
+    if ( !student_name || !emailid || !department || !batch||!password||!fcmtoken) {
         return res.status(400).json({ error: "All fields are required" });
     }
 
     // ✅ Corrected SQL Query with userid
-    const sql = "INSERT INTO students ( student_name, gct_mail_id,phone_number,department, batch,password) VALUES (?, ?, ?, ?, ?,?)";
+    const sql = "INSERT INTO students ( student_name, gct_mail_id,phone_number,department, batch,password,fcm_token) VALUES (?, ?, ?, ?, ?,?,?)";
     
-    db.query(sql, [student_name,emailid,phone, department, batch,password], (err, result) => {
+    db.query(sql, [student_name,emailid,phone, department, batch,password,fcmtoken], (err, result) => {
         if (err) {
             console.error("❌ Error inserting data:", err);
             return res.status(500).json({ error: "Database error", details: err });
