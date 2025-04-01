@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "875780423867",
+    "firebase_url": "https://gctolx-167de-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "gctolx-167de",
+    "storage_bucket": "gctolx-167de.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:875780423867:android:7b3c29ec4265a7b8c1a99e",
+        "android_client_info": {
+          "package_name": "com.example.gctolx"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvoP7GyyV1d_QmGiQlx4_647leneuoet8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
