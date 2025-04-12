@@ -127,34 +127,31 @@ app.post("/addProduct", (req, res) => {
             return res.status(500).json({ error: "Database error", details: err });
         }
 
-        // Find users who liked products with similar names (partial match)
+        // Find users who liked products of the same type
         const query = `
             SELECT DISTINCT s.fcm_token
             FROM product_cart p
             JOIN students s ON p.student_id = s.student_id
-            WHERE p.product_name LIKE ? AND s.fcm_token IS NOT NULL
+            WHERE p.product_type = ? AND s.fcm_token IS NOT NULL
         `;
 
-        db.query(query, [`%${product_name}%`], (err, users) => {
+        db.query(query, [product_type], (err, users) => {
             if (err) {
                 console.error("❌ Error fetching users:", err);
                 return res.status(500).json({ error: "Database error" });
             }
 
-            // Extract FCM tokens
             const tokens = users.map(user => user.fcm_token).filter(Boolean);
 
             if (tokens.length > 0) {
-                // Notification payload
                 const message = {
                     notification: {
                         title: "New Product Added!",
-                        body: `A new product similar to your interest is available: ${product_name} for ₹${cost}`,
+                        body: `A new ${product_type} is available: ${product_name} for ₹${cost}`,
                     },
-                    tokens: tokens, // Send to multiple users
+                    tokens: tokens,
                 };
 
-                // Send notification
                 admin.messaging().sendMulticast(message)
                     .then(response => {
                         console.log("✅ Notifications sent successfully:", response);
@@ -170,6 +167,7 @@ app.post("/addProduct", (req, res) => {
         });
     });
 });
+
 
 
 app.get("/getProducts_except_student", (req, res) => {
