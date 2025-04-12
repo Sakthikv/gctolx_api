@@ -1,31 +1,13 @@
-
 {
-  "project_info": {
-    "project_number": "875780423867",
-    "firebase_url": "https://gctolx-167de-default-rtdb.asia-southeast1.firebasedatabase.app",
-    "project_id": "gctolx-167de",
-    "storage_bucket": "gctolx-167de.firebasestorage.app"
-  },
-  "client": [
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:875780423867:android:7b3c29ec4265a7b8c1a99e",
-        "android_client_info": {
-          "package_name": "com.example.gctolx"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBvoP7GyyV1d_QmGiQlx4_647leneuoet8"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    }
-  ],
-  "configuration_version": "1"
+  "type": "service_account",
+  "project_id": "gctolx-167de",
+  "private_key_id": "b7253ecb7abcfe9140c2bbb954ed1d3ccdff7725",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDheHJwTXT2XaxI\nM8K2tglfVJULN3XkxFnhJzJEhR/sMuGLAZsMPKh3daEAtFslf18WDkMDc9CFxogE\nGfal34yVzCQ2c2FJwiryIBz1UHlEjZdY6YBU3hCso/KzGbQLt+nZjEzb/Ao3tPnH\nS7XM3atASFalVXqApI8H0znJ8YLsU7mt4AbhJ+J0i9UKYIar9R8tjY/pIFe9NA0G\nvWdkr7/G8Bt6v27pBl1oEbnicsqescI96XdOGCV0BUzMS5u6BR9cIhypCL2Rr5+B\ndoLAJp7yulyc9pb4ar62B+yUoFOAxp5+anI5Aq8gU+3p6Eqk73BxLIjuvWYWlOaY\nzZ575w0XAgMBAAECggEAGIr8ZgYVw8BEQc3ElbqbVZGxnE7Kr1QXoTRw5S2FNo2p\nUxt3IwNdUTea3CabFKoDPIrhN43SoSU7EWXkHSqINUF19alklIX6wnAaxtyeKVys\n9gQ2MHFwaOJ7HOIg4PUBkxPnGpEaaaBHtNkkboBN+l7ayP9/fg5WSsNEM0Zt+nHE\nTD26nsr3EFgcdKKO4CEueJ16BrEspktfD9s/Gj4tJvO0/GrmvZdgl6JE/ym0EdA0\nwU8+1n5hBRjVCcRi+BEeEMbSSlzUh9m7tC2SXJ8ioPdOGSpRz+8McSwG7HN1mIeN\nUch5MwYsWS3aQnbtbNPluWnR0Zv5ytQ/Tgy8KlvQgQKBgQD+lNnTToJal+Rtny24\n4pfCXnF58ap8XGKivGRmD4ZngTT/n8dGkkZa0+Pd3Hcn3g/bmvDVe+gAK3WsCouF\nroJf3lu8nqeD0TRWpjtSCQXmofuIsceZRqeKek3Na2IEvaWEMR9ezIDvocEuATz8\nlPHVTEQVKtpgOtlAr1Lfoz7ylwKBgQDiuhIXKCdf/oLtgF7MhJOR18cj4MwtxyyZ\nWIqNZ8zGwLP50EqiZCGLuefTFZkM5pPHEBxHZjy5E/t9CpgjI4hpw9ne1bOm7TDz\nwGKUOXOVCt+BTLwcYpxF3O/haMI26SymuicjKN+fZnmaKf9n+v+EnvbkyeGMlDG0\nvvW8GQSJgQKBgE4ZSe2qExFJsZjzkSo70USehn9bZOq7yMKVutMYhinwmFqnIJIE\nw7KPeEMSpDdFx2WeVa2YUmbi7jl2DrFXBMX2R/xIS6mDn2PJoT8cZ4QGQ0z/BPV/\nmFxCAuY2wB4mM8Wm8DG72P4qiEHdvWDbLIk72VMJD28f/o/6eRkEUoZHAoGBANBE\nTiPZbbn/R/O07N//lLLuvG4XrFcM08oVDEjypaeZEnoSvMxJIIuCfRJoj4vLLso3\n4VIw9uyoD2cAWVpF5KQLFVJdicZ3sXTnL2arE6JAN6lFfLKyXozKc8vieC0KqkqJ\nSzQ/8pMxBdj4ZTX12cvQXkkxrS9+Xd6DX6WmcYWBAoGBALsD2UFkS/j7LE90rctu\nl63IMsJtyAtlwJwqw8t/YDrm4J3ipo0EZl9ugPR2VwPp1gWovUYASp3mMNq20DLU\nj2u564AQCYau0KvCHIHXMAvPsfebnaPsw09wsosPP3APPzvpbRLaevEInDIER+u9\nTa+Uqz6TvRvsUA45ozV/EtBZ\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-fbsvc@gctolx-167de.iam.gserviceaccount.com",
+  "client_id": "118372301292577736700",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40gctolx-167de.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
 }
