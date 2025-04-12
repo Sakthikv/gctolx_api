@@ -4,8 +4,10 @@ const cors = require("cors");
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+
 const admin = require("firebase-admin");
-const serviceAccount = require("google-services.json"); // Replace with your Firebase service account JSON file
+const serviceAccount = require("./google-services.json"); // Make sure path is correct
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
@@ -112,6 +114,7 @@ app.post("/signup_validation", (req, res) => {
 });
 
 
+
 app.post("/addProduct", (req, res) => {
     const { student_id, product_name, product_details, product_type, cost, url } = req.body;
 
@@ -127,12 +130,12 @@ app.post("/addProduct", (req, res) => {
             return res.status(500).json({ error: "Database error", details: err });
         }
 
-        // Find users who liked products of the same type
+        // Use product_type for better similarity filtering than product_name
         const query = `
             SELECT DISTINCT s.fcm_token
             FROM product_cart p
             JOIN students s ON p.student_id = s.student_id
-            WHERE p.product_type = ? AND s.fcm_token IS NOT NULL
+            WHERE p.product_type = ? AND s.fcm_token IS NOT NULL AND s.fcm_token != ''
         `;
 
         db.query(query, [product_type], (err, users) => {
@@ -154,7 +157,7 @@ app.post("/addProduct", (req, res) => {
 
                 admin.messaging().sendMulticast(message)
                     .then(response => {
-                        console.log("✅ Notifications sent successfully:", response);
+                        console.log(`✅ Notifications sent to ${response.successCount} users`);
                         res.json({ message: "✅ Product added and notifications sent!" });
                     })
                     .catch(error => {
@@ -162,11 +165,12 @@ app.post("/addProduct", (req, res) => {
                         res.status(500).json({ error: "Failed to send notifications" });
                     });
             } else {
-                res.json({ message: "✅ Product added but no interested users found." });
+                res.json({ message: "✅ Product added but no matching users with FCM tokens found." });
             }
         });
     });
 });
+
 
 
 
