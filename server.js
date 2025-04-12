@@ -112,6 +112,30 @@ app.post("/signup_validation", (req, res) => {
         }
     });
 });
+app.post('/send-notification', async (req, res) => {
+  const { fcm_token } = req.body;
+
+  if (!fcm_token) {
+    return res.status(400).send({ error: 'Missing fcm_token in request body' });
+  }
+
+  const message = {
+    notification: {
+      title: 'Test Notification',
+      body: 'Hello from Firebase Admin!',
+    },
+    token: fcm_token,
+  };
+
+  try {
+    const response = await admin.messaging().send(message);
+    console.log('✅ Successfully sent message:', response);
+    res.status(200).send({ success: true, messageId: response });
+  } catch (error) {
+    console.error('❌ Error sending message:', error);
+    res.status(500).send({ success: false, error: error.message });
+  }
+});
 
 
 
