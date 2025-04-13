@@ -142,86 +142,95 @@ app.post('/send-notification', async (req, res) => {
 
 
 app.post("/addProduct", (req, res) => {
-  const { student_id, product_name, product_details, product_type, cost, url } = req.body;
-
-  // Step 1: Input validation
-  if (!student_id || !product_name || !product_details || !product_type || !cost || !url) {
-    return res.status(400).json({ error: "All fields are required" });
-  }
-
-  // Step 2: Insert into DB
-  const insertSql = `
-    INSERT INTO product_info 
-    (student_id, product_name, product_details, product_type, cost, url) 
-    VALUES (?, ?, ?, ?, ?, ?)
-  `;
-
-  db.query(insertSql, [student_id, product_name, product_details, product_type, cost, url], (err, result) => {
-    if (err) {
-      console.error("❌ Error inserting product:", err);
-      return res.status(500).json({ error: "Database error", details: err });
+    const { student_id, product_name, product_details, product_type, cost, url } = req.body;
+  
+    // Step 1: Input validation
+    if (!student_id || !product_name || !product_details || !product_type || !cost || !url) {
+      return res.status(400).json({ error: "All fields are required" });
     }
-
-    console.log("✅ Product inserted successfully!");
-
-    // Step 3: Find users who liked similar products
-    const fetchTokensSql = `
+  
+    // Step 2: Insert into DB
+    const insertSql = `
+      INSERT INTO product_info 
+      (student_id, product_name, product_details, product_type, cost, url) 
+      VALUES (?, ?, ?, ?, ?, ?)
+    `;
+  
+    db.query(insertSql, [student_id, product_name, product_details, product_type, cost, url], async (err, result) => {
+      if (err) {
+        console.error("❌ Error inserting product:", err);
+        return res.status(500).json({ error: "Database error", details: err });
+      }
+  
+      console.log("✅ Product inserted successfully!");
+  
+      // Step 3: Find users who liked similar products
+      const fetchTokensSql = `
       SELECT DISTINCT s.fcm_token
       FROM students s
-      JOIN product_cart p ON p.student_id = s.student_id
-      WHERE p.product_type LIKE CONCAT('%', ?, '%')
+      JOIN product_cart p ON p.buying_student_id = s.student_id
+      WHERE p.product_name LIKE CONCAT('%', ?, '%')
         AND s.fcm_token IS NOT NULL 
         AND s.fcm_token != ''
+        AND s.student_id != ?
     `;
+    
+   
+  
+      db.query(fetchTokensSql, [product_name,student_id], (err, users) => {
+        if (err) {
+          console.error("❌ Error fetching FCM tokens:", err);
+          console.log("fetching error");
+          return res.status(500).json({ error: "Database error" });
+        }
+  
+        console.log(`📦 Found ${users.length} users who liked ${product_name}`);
+  
+        const tokens = [...new Set(users.map(u => u.fcm_token).filter(Boolean))];
+  
+        if (tokens.length === 0) {
+          console.log("⚠️ No FCM tokens found for notification");
+          return res.json({ message: "✅ Product added but no matching users with FCM tokens found." });
+        }
+  
+        console.log("📨 Sending notifications to:", tokens);
+  
+      (async () => {
+  let successCount = 0;
+  const insertedProductId = result.insertId;
 
-    db.query(fetchTokensSql, [product_type], (err, users) => {
-      if (err) {
-        console.error("❌ Error fetching FCM tokens:", err);
-        return res.status(500).json({ error: "Database error" });
-      }
+  for (const token of tokens) {
+    const message = {
+      notification: {
+        title: "New Product Added!",
+        body: `A new ${product_type} is available: ${product_name} for ₹${cost}`,
+      },
+      token: token, // Send one at a time
+      data: {
+        product_id: String(insertedProductId), // 🆕 Include ID
+      },
+    };
 
-      console.log(`📦 Found ${users.length} users who liked ${product_type}`);
+    try {
+      await admin.messaging().send(message);
+      console.log(`✅ Notification sent to token: ${token}`);
+      successCount++;
+    } catch (error) {
+      console.error(`❌ Failed to send notification to token: ${token}`, error.message);
+    }
+  }
 
-      const tokens = [...new Set(users.map(u => u.fcm_token).filter(Boolean))];
+  res.json({ message: `✅ Product added and notifications sent to ${successCount} users.` });
+})();
 
-      if (tokens.length === 0) {
-        console.log("⚠️ No FCM tokens found for notification");
-        return res.json({ message: "✅ Product added but no matching users with FCM tokens found." });
-      }
-
-      console.log("📨 Sending notifications to:", tokens);
-
-      const message = {
-        notification: {
-          title: "New Product Added!",
-          body: `A new ${product_type} is available: ${product_name} for ₹${cost}`,
-        },
-        tokens: tokens,
-      };
-
-      admin.messaging().sendMulticast(message)
-        .then(response => {
-          console.log(`✅ Notifications sent to ${response.successCount} users`);
-
-          if (response.failureCount > 0) {
-            console.warn(`⚠️ ${response.failureCount} notifications failed`);
-            response.responses.forEach((resp, idx) => {
-              if (!resp.success) {
-                console.error(`❌ Token[${tokens[idx]}] Error:`, resp.error);
-              }
-            });
-          }
-
-          res.json({ message: `✅ Product added and notifications sent to ${response.successCount} users.` });
-        })
-        .catch(error => {
-          console.error("❌ Error sending notifications:", error);
-          res.status(500).json({ error: "Failed to send notifications", details: error.message });
-        });
+  
+        
+          
+          
+          
+      });
     });
   });
-});
-
 
 
 app.get("/getProducts_except_student", (req, res) => {
