@@ -50,6 +50,38 @@ app.post("/addUser", (req, res) => {
     });
 });
 
+app.post("/updateUser", (req, res) => {
+    const { student_id, student_name, phone, emailid, department, batch, password } = req.body;
+
+    // Validate required fields
+    if (!student_id || !student_name || !emailid || !department || !batch || !password) {
+        return res.status(400).json({ error: "All fields are required" });
+    }
+
+    // SQL query to update user by student_id
+    const sql = `
+        UPDATE students 
+        SET student_name = ?, gct_mail_id = ?, phone_number = ?, department = ?, batch = ?, password = ?
+        WHERE student_id = ?
+    `;
+
+    const values = [student_name, emailid, phone, department, batch, password, student_id];
+
+    db.query(sql, values, (err, result) => {
+        if (err) {
+            console.error("❌ Error updating data:", err);
+            return res.status(500).json({ error: "Database error", details: err });
+        }
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        res.status(200).json({ message: "✅ User updated successfully" });
+    });
+});
+
+
 // 🔵 API to Fetch Data (GET)
 app.get("/getUsers", (req, res) => {
     const sql = "SELECT * FROM students";
