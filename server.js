@@ -265,6 +265,43 @@ app.post("/addProduct", (req, res) => {
   });
 
 
+app.post("/updateProduct", (req, res) => {
+  const { product_id, product_name, product_details, product_type, cost, url } = req.body;
+
+  // Step 1: Input validation
+  if (!product_id || !product_name || !product_details || !product_type || !cost || !url) {
+    return res.status(400).json({ error: "All fields are required" });
+  }
+
+  // Step 2: Update in DB
+  const updateSql = `
+    UPDATE product_info 
+    SET 
+      product_name = ?, 
+      product_details = ?, 
+      product_type = ?, 
+      cost = ?, 
+      url = ?
+    WHERE product_id = ?
+  `;
+
+  db.query(updateSql, [product_name, product_details, product_type, cost, url, product_id], (err, result) => {
+    if (err) {
+      console.error("❌ Error updating product:", err);
+      return res.status(500).json({ error: "Database error", details: err });
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+
+    console.log("✅ Product updated successfully!");
+    return res.status(200).json({ message: "Product updated successfully" });
+  });
+});
+
+
+
 app.get("/getProducts_except_student", (req, res) => {
     const { student_id } = req.query;
     if (!student_id) {
