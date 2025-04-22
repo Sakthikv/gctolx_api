@@ -90,7 +90,7 @@ app.get("/getUsers", (req, res) => {
             console.error("❌ Error fetching data:", err);
             return res.status(500).json({ error: "Database error", details: err });
         }
-        res.json(result);
+        res.status(200).json(result);
     });
 });
 
