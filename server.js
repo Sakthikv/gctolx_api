@@ -264,6 +264,28 @@ app.post("/addProduct", (req, res) => {
     });
   });
 
+// 🔵 API to Fetch Data (GET)
+app.get("/getProducts", (req, res) => {
+    const sql = "SELECT * FROM product_info";
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.error("❌ Error fetching data:", err);
+            return res.status(500).json({ error: "Database error", details: err });
+        }
+        res.status(200).json(result);
+    });
+});
+app.get("/getWishList", (req, res) => {
+    const sql = "SELECT * FROM product_cart";
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.error("❌ Error fetching data:", err);
+            return res.status(500).json({ error: "Database error", details: err });
+        }
+        res.status(200).json(result);
+    });
+});
+
 
 app.post("/updateProduct", (req, res) => {
   const { product_id, product_name, product_details, product_type, cost, url } = req.body;
