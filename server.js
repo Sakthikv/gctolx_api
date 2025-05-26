@@ -95,6 +95,35 @@ app.get("/getUsers", (req, res) => {
 });
 
 
+app.post("/addProduct1", (req, res) => {
+  const { student_id, product_name, product_details, product_type, cost, url } = req.body;
+
+  // Step 1: Input validation
+  if (!student_id || !product_name || !product_details || !product_type || !cost || !url) {
+    return res.status(400).json({ error: "All fields are required" });
+  }
+
+  // Step 2: SQL Insert Statement
+  const insertSql = `
+    INSERT INTO product_info 
+    (student_id, product_name, product_details, product_type, cost, url) 
+    VALUES (?, ?, ?, ?, ?, ?)
+  `;
+
+  // Step 3: Execute query with values
+  db.query(
+    insertSql,
+    [student_id, product_name, product_details, product_type, cost, url],
+    (err, result) => {
+      if (err) {
+        console.error("❌ Database insertion error:", err);
+        return res.status(500).json({ error: "Database error" });
+      }
+
+      res.status(200).json("Product inserted successfully");
+    }
+  );
+});
 
 // 🟡 API for User Login (POST)
 app.post("/login", (req, res) => {
